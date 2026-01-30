@@ -1,0 +1,102 @@
+[
+    {
+        "id": 1,
+        "topic": "Michelin_3_Stars_Mingles",
+        "status": "RENDER_DONE",
+        "script_path": "E:\\work\\github\\shorts-factory\\data\\scripts\\001_Michelin_3_Stars_Mingles.txt",
+        "image_paths": [],
+        "audio_path": "E:\\work\\github\\shorts-factory\\data\\audio\\001_Michelin_3_Stars_Mingles.mp3",
+        "subtitle_path": "E:\\work\\github\\shorts-factory\\data\\subtitles\\001_Michelin_3_Stars_Mingles.srt",
+        "output_path": "E:\\work\\github\\shorts-factory\\data\\output\\001_Michelin_3_Stars_Mingles.mp4"
+    },
+    {
+        "id": 2,
+        "topic": "Michelin_2_Stars_Jungsik",
+        "status": "RENDER_DONE",
+        "script_path": "E:\\work\\github\\shorts-factory\\data\\scripts\\002_Michelin_2_Stars_Jungsik.txt",
+        "image_paths": [],
+        "audio_path": "E:\\work\\github\\shorts-factory\\data\\audio\\002_Michelin_2_Stars_Jungsik.mp3",
+        "subtitle_path": "E:\\work\\github\\shorts-factory\\data\\subtitles\\002_Michelin_2_Stars_Jungsik.srt",
+        "output_path": "E:\\work\\github\\shorts-factory\\data\\output\\002_Michelin_2_Stars_Jungsik.mp4"
+    },
+    {
+        "id": 3,
+        "topic": "Michelin_2_Stars_Kojima",
+        "status": "RENDER_DONE",
+        "script_path": "E:\\work\\github\\shorts-factory\\data\\scripts\\003_Michelin_2_Stars_Kojima.txt",
+        "image_paths": [],
+        "audio_path": "E:\\work\\github\\shorts-factory\\data\\audio\\003_Michelin_2_Stars_Kojima.mp3",
+        "subtitle_path": "E:\\work\\github\\shorts-factory\\data\\subtitles\\003_Michelin_2_Stars_Kojima.srt",
+        "output_path": "E:\\work\\github\\shorts-factory\\data\\output\\003_Michelin_2_Stars_Kojima.mp4"
+    },
+    {
+        "id": 4,
+        "topic": "Michelin_2_Stars_La_Yeon",
+        "status": "RENDER_DONE",
+        "script_path": "E:\\work\\github\\shorts-factory\\data\\scripts\\004_Michelin_2_Stars_La_Yeon.txt",
+        "image_paths": [],
+        "audio_path": "E:\\work\\github\\shorts-factory\\data\\audio\\004_Michelin_2_Stars_La_Yeon.mp3",
+        "subtitle_path": "E:\\work\\github\\shorts-factory\\data\\subtitles\\004_Michelin_2_Stars_La_Yeon.srt",
+        "output_path": "E:\\work\\github\\shorts-factory\\data\\output\\004_Michelin_2_Stars_La_Yeon.mp4"
+    },
+    {
+        "id": 5,
+        "topic": "Michelin_2_Stars_Soigne",
+        "status": "RENDER_DONE",
+        "script_path": "E:\\work\\github\\shorts-factory\\data\\scripts\\005_Michelin_2_Stars_Soigne.txt",
+        "image_paths": [],
+        "audio_path": "E:\\work\\github\\shorts-factory\\data\\audio\\005_Michelin_2_Stars_Soigne.mp3",
+        "subtitle_path": "E:\\work\\github\\shorts-factory\\data\\subtitles\\005_Michelin_2_Stars_Soigne.srt",
+        "output_path": "E:\\work\\github\\shorts-factory\\data\\output\\005_Michelin_2_Stars_Soigne.mp4"
+    },
+    {
+        "id": 6,
+        "topic": "Michelin_2_Stars_Alla_Prima",
+        "status": "RENDER_DONE",
+        "script_path": "E:\\work\\github\\shorts-factory\\data\\scripts\\006_Michelin_2_Stars_Alla_Prima.txt",
+        "image_paths": [],
+        "audio_path": "E:\\work\\github\\shorts-factory\\data\\audio\\006_Michelin_2_Stars_Alla_Prima.mp3",
+        "subtitle_path": "E:\\work\\github\\shorts-factory\\data\\subtitles\\006_Michelin_2_Stars_Alla_Prima.srt",
+        "output_path": "E:\\work\\github\\shorts-factory\\data\\output\\006_Michelin_2_Stars_Alla_Prima.mp4"
+    },
+    {
+        "id": 7,
+        "topic": "Michelin_2_Stars_Kwonsooksoo",
+        "status": "RENDER_DONE",
+        "script_path": "E:\\work\\github\\shorts-factory\\data\\scripts\\007_Michelin_2_Stars_Kwonsooksoo.txt",
+        "image_paths": [],
+        "audio_path": "E:\\work\\github\\shorts-factory\\data\\audio\\007_Michelin_2_Stars_Kwonsooksoo.mp3",
+        "subtitle_path": "E:\\work\\github\\shorts-factory\\data\\subtitles\\007_Michelin_2_Stars_Kwonsooksoo.srt",
+        "output_path": "E:\\work\\github\\shorts-factory\\data\\output\\007_Michelin_2_Stars_Kwonsooksoo.mp4"
+    },
+    {
+        "id": 8,
+        "topic": "Michelin_2_Stars_Restaurant_Allen",
+        "status": "RENDER_DONE",
+        "script_path": "E:\\work\\github\\shorts-factory\\data\\scripts\\008_Michelin_2_Stars_Restaurant_Allen.txt",
+        "image_paths": [],
+        "audio_path": "E:\\work\\github\\shorts-factory\\data\\audio\\008_Michelin_2_Stars_Restaurant_Allen.mp3",
+        "subtitle_path": "E:\\work\\github\\shorts-factory\\data\\subtitles\\008_Michelin_2_Stars_Restaurant_Allen.srt",
+        "output_path": "E:\\work\\github\\shorts-factory\\data\\output\\008_Michelin_2_Stars_Restaurant_Allen.mp4"
+    },
+    {
+        "id": 9,
+        "topic": "Michelin_2_Stars_Mitou",
+        "status": "RENDER_DONE",
+        "script_path": "E:\\work\\github\\shorts-factory\\data\\scripts\\009_Michelin_2_Stars_Mitou.txt",
+        "image_paths": [],
+        "audio_path": "E:\\work\\github\\shorts-factory\\data\\audio\\009_Michelin_2_Stars_Mitou.mp3",
+        "subtitle_path": "E:\\work\\github\\shorts-factory\\data\\subtitles\\009_Michelin_2_Stars_Mitou.srt",
+        "output_path": "E:\\work\\github\\shorts-factory\\data\\output\\009_Michelin_2_Stars_Mitou.mp4"
+    },
+    {
+        "id": 10,
+        "topic": "Michelin_2_Stars_Evett",
+        "status": "RENDER_DONE",
+        "script_path": "E:\\work\\github\\shorts-factory\\data\\scripts\\010_Michelin_2_Stars_Evett.txt",
+        "image_paths": [],
+        "audio_path": "E:\\work\\github\\shorts-factory\\data\\audio\\010_Michelin_2_Stars_Evett.mp3",
+        "subtitle_path": "E:\\work\\github\\shorts-factory\\data\\subtitles\\010_Michelin_2_Stars_Evett.srt",
+        "output_path": "E:\\work\\github\\shorts-factory\\data\\output\\010_Michelin_2_Stars_Evett.mp4"
+    }
+]

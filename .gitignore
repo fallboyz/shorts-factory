@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+venv/
+ENV/
+
+# Project Data (Resources)
+data/audio/*
+!data/audio/README.md
+data/images/*
+!data/images/README.md
+data/output/*
+!data/output/README.md
+data/scripts/*
+!data/scripts/README.md
+data/subtitles/*
+!data/subtitles/README.md
+
+# Assets
+assets/fonts/*
+!assets/fonts/README.md
+
+# System
+.DS_Store
+Thumbs.db
+.env
+inventory_backup.json
