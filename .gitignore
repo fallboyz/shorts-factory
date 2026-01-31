@@ -20,8 +20,8 @@ data/subtitles/*
 !data/subtitles/README.md
 
 # Assets
-assets/fonts/*
-!assets/fonts/README.md
+# assets/fonts/ is now tracked
+
 
 # System
 .DS_Store
