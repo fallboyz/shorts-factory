@@ -94,17 +94,10 @@ def main():
         logger.info("Phase 1: TTS Generation...")
         tts = TTSManager(voice=args.voice)
         try:
-            temp_vtt = tts.generate(text, item["audio_path"], item["subtitle_path"]) # The 3rd arg is unused by generate for now, but we use the return
+            # Generate directly to item["subtitle_path"]
+            tts.generate(text, item["audio_path"], item["subtitle_path"])
         except Exception as e:
             logger.error(f"TTS Failed: {e}")
-            return
-
-        # 3. Subtitle Conversion
-        logger.info("Phase 2: Subtitle Conversion...")
-        try:
-            SubtitleGenerator.vtt_to_srt(temp_vtt, item["subtitle_path"])
-        except Exception as e:
-            logger.error(f"Subtitle Conversion Failed: {e}")
             return
 
         # 4. Visual Composer
@@ -130,4 +123,10 @@ def main():
         parser.print_help()
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+        sys.stdout.flush()
+        sys.exit(0)
+    except Exception as e:
+        logger.error(f"Fatal error: {e}")
+        sys.exit(1)

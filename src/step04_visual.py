@@ -38,14 +38,14 @@ class VisualComposer:
             
             # crop=w:h:x:y
             cmd = [
-                "ffmpeg", "-y",
+                "ffmpeg", "-y", "-nostdin",
                 "-i", image_path,
                 "-filter:v", f"crop={w}:{h}:{x}:{y}",
                 out_path
             ]
             
             try:
-                subprocess.run(cmd, check=True, capture_output=True)
+                subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
                 sliced_paths.append(out_path)
             except subprocess.CalledProcessError as e:
                 logger.error(f"Failed to slice image {idx+1}: {e}")
@@ -82,25 +82,26 @@ class VisualComposer:
             # FPS=30
             # duration must be passed to ffmpeg input logic or explicitly set
             
+            # Ensure d is enough but not excessively large
+            num_frames = int(max(1, img_duration * 60))
+            
             cmd = [
-                "ffmpeg", "-y",
+                "ffmpeg", "-y", "-nostdin",
                 "-loop", "1",
                 "-i", img_path,
-                # Supersampling technique to remove jitter:
-                # 1. Scale up to 4K (2160x3840)
-                # 2. Zoompan on 4K canvas
-                # 3. Output is implicitly scaled down to 1080x1920 by the target/next stage or we set output size in zoompan but keep internal high res?
-                # Actually zoompan filter outputs what 's' specifies.
-                # So inputs should be scaled up FIRST.
-                
-                "-vf", f"scale=2160:3840,zoompan=z='min(zoom+0.0005,1.5)':d={int(img_duration*60)+60}:x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':s=1080x1920,format=yuv420p",
+                # Try lower resolution scaling if 4K is failing
+                "-vf", f"scale=1620:2880,zoompan=z='min(zoom+0.0005,1.5)':d={num_frames}:x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':s=1080x1920,format=yuv420p",
                 "-c:v", "libx264",
+                "-preset", "fast",
                 "-t", str(img_duration),
                 "-r", "60",
                 clip_path
             ]
             
-            subprocess.run(cmd, check=True, capture_output=True)
+            result = subprocess.run(cmd, check=False, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True)
+            if result.returncode != 0:
+                logger.error(f"Failed to create clip {idx}: {result.stderr}")
+                raise Exception(f"FFmpeg clip creation failed for {img_path}")
             clip_paths.append(clip_path)
 
         # 2. Concat Clips
@@ -112,7 +113,10 @@ class VisualComposer:
                 f.write(f"file '{safe_path}'\n")
         
         temp_video = os.path.join(temp_dir, "temp_video.mp4")
-        subprocess.run(["ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", list_file, "-c", "copy", temp_video], check=True, capture_output=True)
+        result = subprocess.run(["ffmpeg", "-y", "-nostdin", "-f", "concat", "-safe", "0", "-i", list_file, "-c", "copy", temp_video], check=False, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True)
+        if result.returncode != 0:
+            logger.error(f"Failed to concat clips: {result.stderr}")
+            raise Exception("FFmpeg concat failed")
 
         # 3. Finalize (Audio + Subtitles)
         # Style: NanumGothicBold, Size 18, Bottom Center
@@ -133,7 +137,7 @@ class VisualComposer:
         style = "Fontname=NanumGothicBold,FontSize=8,Alignment=2,MarginV=45"
         
         cmd_final = [
-            "ffmpeg", "-y",
+            "ffmpeg", "-y", "-nostdin",
             "-i", temp_video,
             "-i", audio_path,
             "-filter_complex", f"subtitles='{rel_subtitle_path}':fontsdir='{rel_fonts_dir}':force_style='{style}'",
@@ -144,10 +148,10 @@ class VisualComposer:
         ]
         
         logger.info(f"Rendering final video: {output_path}")
-        result = subprocess.run(cmd_final, check=False, capture_output=True, text=True)
+        result = subprocess.run(cmd_final, check=False, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True)
         if result.returncode != 0:
-            logger.error(f"Rendering failed: {result.stderr}")
-            raise Exception("Rendering failed")
+            logger.error(f"Final rendering failed: {result.stderr}")
+            raise Exception(f"Final rendering failed for {output_path}")
             
         # Cleanup
         if os.path.exists(list_file): os.remove(list_file)

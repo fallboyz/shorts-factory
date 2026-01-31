@@ -12,13 +12,9 @@ class TTSManager:
 
     def generate(self, text, output_audio_path, output_subtitle_path):
         """
-        Generates MP3 and VTT (Subtitle) using edge-tts CLI.
-        Note: edge-tts outputs subtitles in VTT format by default when using --write-subtitles.
-        We will rely on SubtitleGenerator to convert VTT to SRT.
+        Generates MP3 and Subtitle directly using edge-tts CLI.
+        We write directly to the final subtitle path to avoid redundant conversion steps.
         """
-        # We need a temporary VTT path because edge-tts writes to a specific extension
-        temp_vtt_path = output_audio_path.replace(".mp3", ".vtt")
-        
         cmd = [
             sys.executable,
             "-m", "edge_tts",
@@ -26,18 +22,15 @@ class TTSManager:
             "--voice", self.voice,
             "--rate", self.rate,
             "--write-media", output_audio_path,
-            "--write-subtitles", temp_vtt_path
+            "--write-subtitles", output_subtitle_path
         ]
         
         try:
             logger.info(f"Running TTS: {' '.join(cmd)}")
-            result = subprocess.run(cmd, check=True, capture_output=True, text=True)
-            logger.info("TTS generation successful")
-            
-            # If the user requested a specific subtitle path (which might be used later for VTT->SRT),
-            # we just return the path to the generated VTT for now, or move it if needed.
-            # For simplicity, we assume the caller will handle the VTT->SRT conversion using the temp_vtt_path.
-            return temp_vtt_path
+            # Use DEVNULL for stdout and PIPE for stderr to avoid hanging on large outputs
+            result = subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True)
+            logger.info(f"TTS generation successful: {output_audio_path}")
+            return output_subtitle_path
             
         except subprocess.CalledProcessError as e:
             logger.error(f"TTS generation failed: {e.stderr}")
