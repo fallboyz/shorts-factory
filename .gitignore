@@ -28,3 +28,4 @@ data/subtitles/*
 Thumbs.db
 .env
 inventory_backup.json
+data/inventory.json

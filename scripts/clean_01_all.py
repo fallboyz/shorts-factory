@@ -7,16 +7,19 @@ def run_script(name):
     os.system(f"python {script_path}")
 
 if __name__ == '__main__':
-    print("WARNING: This will delete ALL data (Scripts, Audio, Images, Output).")
+    print("WARNING: This will delete ALL resources EXCEPT final output videos (.mp4).")
+    print("This includes scripts, audio, images, and resetting the inventory.")
     try:
-        confirm = input("Are you sure? (y/n): ")
+        confirm = input("Proceed? (y/n): ")
         if confirm.lower() == 'y':
             run_script('clean_02_scripts.py')
             run_script('clean_03_audio.py')
             run_script('clean_04_images.py')
-            run_script('clean_05_output.py')
-            print("\nAll Cleaned.")
+            run_script('clean_06_inventory.py')
+            print("\nCleanup Complete. (Final MP4s and Fonts are preserved)")
         else:
             print("Cancelled.")
     except KeyboardInterrupt:
         print("\nCancelled.")
+
+
