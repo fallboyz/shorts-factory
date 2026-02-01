@@ -88,3 +88,24 @@ python main.py render --id <번호>
 ```powershell
 python main.py render --start <시작번호> --end <끝번호>
 ```
+
+---
+
+## 7. 정기 관리 및 클린업 (Maintenance & Cleanup)
+
+작업이 완료된 후, 디스크 공간을 확보하거나 새로운 프로젝트를 시작하기 위해 `scripts/` 폴더의 클린업용 스크립트를 사용할 수 있습니다.
+
+### 🧹 프로젝트 초기화 (Full Reset)
+최종 결과물인 **MP4 영상과 폰트 파일만 남기고** 모든 중간 리소스(스크립트, 음성, 원본 이미지 등)를 삭제하며 인벤토리를 초기화합니다.
+```powershell
+python scripts/clean_01_all.py
+```
+*   **삭제되는 항목**: 작성된 대본, 생성된 음성/이미지/자막 파일, 인벤토리(inventory.json) 기록.
+*   **유지되는 항목**: 완성된 쇼츠 영상(`data/output/*.mp4`), 프로젝트 폰트.
+
+### 🪒 부분 관리 (Partial Cleanup)
+- `python scripts/clean_02_scripts.py`: 대본 파일만 삭제.
+- `python scripts/clean_03_audio.py`: 음성 파일만 삭제.
+- `python scripts/clean_04_images.py`: 이미지 및 슬라이싱 데이터 삭제.
+- `python scripts/clean_05_output.py`: **[주의]** 최종 출력 영상(.mp4)을 모두 삭제.
+- `python scripts/clean_06_inventory.py`: 인벤토리 기록만 초기화.
