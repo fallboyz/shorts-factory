@@ -98,7 +98,7 @@ class VisualComposer:
                 clip_path
             ]
             
-            result = subprocess.run(cmd, check=False, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True)
+            result = subprocess.run(cmd, check=False, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True, encoding='utf-8', errors='replace')
             if result.returncode != 0:
                 logger.error(f"Failed to create clip {idx}: {result.stderr}")
                 raise Exception(f"FFmpeg clip creation failed for {img_path}")
@@ -106,14 +106,14 @@ class VisualComposer:
 
         # 2. Concat Clips
         list_file = os.path.join(temp_dir, "clips.txt")
-        with open(list_file, "w") as f:
+        with open(list_file, "w", encoding='utf-8') as f:
             for p in clip_paths:
                 # FFmpeg concat requires forward slashes or escaped backslashes
                 safe_path = p.replace("\\", "/")
                 f.write(f"file '{safe_path}'\n")
         
         temp_video = os.path.join(temp_dir, "temp_video.mp4")
-        result = subprocess.run(["ffmpeg", "-y", "-nostdin", "-f", "concat", "-safe", "0", "-i", list_file, "-c", "copy", temp_video], check=False, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True)
+        result = subprocess.run(["ffmpeg", "-y", "-nostdin", "-f", "concat", "-safe", "0", "-i", list_file, "-c", "copy", temp_video], check=False, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True, encoding='utf-8', errors='replace')
         if result.returncode != 0:
             logger.error(f"Failed to concat clips: {result.stderr}")
             raise Exception("FFmpeg concat failed")
@@ -148,7 +148,7 @@ class VisualComposer:
         ]
         
         logger.info(f"Rendering final video: {output_path}")
-        result = subprocess.run(cmd_final, check=False, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True)
+        result = subprocess.run(cmd_final, check=False, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True, encoding='utf-8', errors='replace')
         if result.returncode != 0:
             logger.error(f"Final rendering failed: {result.stderr}")
             raise Exception(f"Final rendering failed for {output_path}")

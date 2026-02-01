@@ -28,7 +28,7 @@ class TTSManager:
         try:
             logger.info(f"Running TTS: {' '.join(cmd)}")
             # Use DEVNULL for stdout and PIPE for stderr to avoid hanging on large outputs
-            result = subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True)
+            result = subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True, encoding='utf-8', errors='replace')
             logger.info(f"TTS generation successful: {output_audio_path}")
             return output_subtitle_path
             
