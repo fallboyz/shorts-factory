@@ -119,7 +119,6 @@ class VisualComposer:
             raise Exception("FFmpeg concat failed")
 
         # 3. Finalize (Audio + Subtitles)
-        # Style: NanumGothicBold, Size 18, Bottom Center
         # FontPath: assets/fonts/NanumGothicBold.ttf
         # Note: libass (ffmpeg subtitles) needs escaped paths.
         
@@ -134,7 +133,7 @@ class VisualComposer:
         # Fontname=NanumGothicBold,FontSize=18,Alignment=2,MarginV=50
         # Adjusted to 45 to compensate for libass low-res scaling behavior.
         # This should place subtitles safely above the Shorts UI bottom overlay.
-        style = "Fontname=NanumGothicBold,FontSize=8,Alignment=2,MarginV=45"
+        style = "Fontname=NanumGothicBold,FontSize=12,Alignment=2,MarginV=45"
         
         cmd_final = [
             "ffmpeg", "-y", "-nostdin",

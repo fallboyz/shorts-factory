@@ -44,10 +44,18 @@ def render_item(inventory, composer, data_dir, item_id, voice):
             logger.error("Script is empty.")
             return False
 
-        # 2. TTS Generation
+        # 2. TTS Generation (Generate temp VTT first for correction)
         logger.info(f"Phase 1: TTS Generation for ID {item_id}...")
+        temp_vtt = item["subtitle_path"].replace(".srt", ".vtt")
         tts = TTSManager(voice=voice)
-        tts.generate(text, item["audio_path"], item["subtitle_path"])
+        tts.generate(text, item["audio_path"], temp_vtt)
+
+        # 2.5 Subtitle Correction (Fix Overlaps & Convert)
+        logger.info(f"Phase 1.5: Correcting Subtitle overlaps...")
+        sub_gen = SubtitleGenerator()
+        sub_gen.vtt_to_srt(temp_vtt, item["subtitle_path"])
+        if os.path.exists(temp_vtt):
+            os.remove(temp_vtt)
 
         # 3. Visual Composition
         logger.info(f"Phase 2: Visual Composition for ID {item_id}...")

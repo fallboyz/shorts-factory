@@ -68,7 +68,7 @@
 
 ### 📝 자막 스타일 (Subtitle Specs)
 *   **폰트**: `assets/fonts/NanumGothicBold.ttf`
-*   **스타일**: `FontSize=8` (libass 기준), **MarginV=45** (하단 레이어 간섭 방지).
+*   **스타일**: `Fontname=NanumGothicBold,FontSize=12,Alignment=2,MarginV=45`
 
 ---
 

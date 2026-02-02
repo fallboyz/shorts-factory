@@ -87,16 +87,14 @@ class SubtitleGenerator:
             parsed_blocks = merged_blocks
             # ---------------------------------
 
-            # Fix Overlaps
-            # If current.start < prev.end, set prev.end = current.start - 10ms
-            for i in range(len(parsed_blocks) - 1):
+            # Fix Overlaps (User's request: Adjust next start to previous end)
+            for i in range(1, len(parsed_blocks)):
+                prev = parsed_blocks[i-1]
                 curr = parsed_blocks[i]
-                next_blk = parsed_blocks[i+1]
                 
-                if curr['end'] > next_blk['start']:
-                    # Overlap detected! Clip current end.
-                    # Ensure minimal gap of 10ms to prevent collision
-                    curr['end'] = max(curr['start'], next_blk['start'] - 10)
+                if curr['start'] < prev['end']:
+                    # Overlap detected! Push current start forward to match previous end.
+                    curr['start'] = prev['end']
 
             # Rebuild SRT
             srt_content = []
