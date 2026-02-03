@@ -1,12 +1,17 @@
 import os
-import shutil
 import glob
 
 def clean():
-    print("Cleaning Audio Files...")
-    targets = ['data/audio/*.mp3', 'data/audio/*.wav']
+    print("Cleaning Marketing Metadata (TXT, JSON)...")
+    targets = [
+        'data/metadata/*.txt', 
+        'data/metadata/*.json'
+    ]
     for target in targets:
         for f in glob.glob(target):
+            # Keep README.md
+            if f.endswith('README.md'):
+                continue
             try:
                 os.remove(f)
                 print(f"Deleted: {f}")

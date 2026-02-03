@@ -130,16 +130,11 @@ class VisualComposer:
         rel_fonts_dir = os.path.relpath(os.path.join(project_root, "assets", "fonts"), project_root).replace("\\", "/")
         
         # Simplify style: Remove &H colors for now to avoid shell/parsing issues
-        # Fontname=NanumGothicBold,FontSize=18,Alignment=2,MarginV=50
-        # Adjusted to 45 to compensate for libass low-res scaling behavior.
-        # This should place subtitles safely above the Shorts UI bottom overlay.
-        style = "Fontname=NanumGothicBold,FontSize=12,Alignment=2,MarginV=45"
-        
         cmd_final = [
             "ffmpeg", "-y", "-nostdin",
             "-i", temp_video,
             "-i", audio_path,
-            "-filter_complex", f"subtitles='{rel_subtitle_path}':fontsdir='{rel_fonts_dir}':force_style='{style}'",
+            "-filter_complex", f"subtitles='{rel_subtitle_path}':fontsdir='{rel_fonts_dir}'",
             "-c:v", "libx264",
             "-c:a", "aac",
             "-shortest",

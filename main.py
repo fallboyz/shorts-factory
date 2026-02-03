@@ -6,11 +6,12 @@ from src.step01_inventory import InventoryManager
 from src.step02_tts import TTSManager
 from src.step03_subtitle import SubtitleGenerator
 from src.step04_visual import VisualComposer
+from src.step05_marketing import MarketingManager
 from src.step00_utils import setup_logger, ensure_dir, get_project_root
 
 logger = setup_logger("ShortsFactory_Main")
 
-def render_item(inventory, composer, data_dir, item_id, voice):
+def render_item(inventory, composer, marketer, data_dir, item_id, voice):
     """
     Renders a single item. Returns True if success, False otherwise.
     This logic is shared by both single and batch rendering.
@@ -23,8 +24,12 @@ def render_item(inventory, composer, data_dir, item_id, voice):
     logger.info(f"--- Processing Video {item_id}: {item['topic']} ---")
     
     # 1. Check Resources
+    import re
+    clean_topic = re.sub(r'^\d+_', '', item['topic']).replace('_', ' ').strip()
+    item['topic'] = clean_topic # Update item topic for clean metadata
+    
     script_path = item["script_path"]
-    base_name = f"{item['id']:03d}_{item['topic']}"
+    base_name = f"{item['id']:02d}_{clean_topic.replace(' ', '_')}"
     source_image_path = os.path.join(data_dir, "images", base_name, "source.png")
     
     if not os.path.exists(script_path):
@@ -46,14 +51,15 @@ def render_item(inventory, composer, data_dir, item_id, voice):
 
         # 2. TTS Generation (Generate temp VTT first for correction)
         logger.info(f"Phase 1: TTS Generation for ID {item_id}...")
-        temp_vtt = item["subtitle_path"].replace(".srt", ".vtt")
+        temp_vtt = item["subtitle_path"].replace(".ass", ".vtt")
         tts = TTSManager(voice=voice)
         tts.generate(text, item["audio_path"], temp_vtt)
 
-        # 2.5 Subtitle Correction (Fix Overlaps & Convert)
-        logger.info(f"Phase 1.5: Correcting Subtitle overlaps...")
+        # 2.5 Subtitle Correction (Fix Overlaps & Convert to ASS)
+        logger.info(f"Phase 1.5: Converting to ASS with custom spacing...")
         sub_gen = SubtitleGenerator()
-        sub_gen.vtt_to_srt(temp_vtt, item["subtitle_path"])
+        # Use Pretendard Bold as we just updated it
+        sub_gen.vtt_to_ass(temp_vtt, item["subtitle_path"], font_name="Pretendard Bold")
         if os.path.exists(temp_vtt):
             os.remove(temp_vtt)
 
@@ -63,6 +69,11 @@ def render_item(inventory, composer, data_dir, item_id, voice):
         slices = composer.slice_image(source_image_path, image_dir)
         composer.compose_video(slices, item["audio_path"], item["subtitle_path"], item["output_path"])
         
+        # 4. Marketing Metadata Generation
+        logger.info(f"Phase 3: Generating Marketing Metadata for ID {item_id}...")
+        metadata = marketer.generate_metadata(text, item["topic"])
+        marketer.save_metadata(metadata, item["metadata_path"])
+
         inventory.update_status(item["id"], "RENDER_DONE")
         logger.info(f"✅ Render Complete! Output: {item['output_path']}")
         return True
@@ -94,37 +105,42 @@ def main():
     inventory = InventoryManager(inventory_path)
     
     if args.command == "buildup":
-        item = inventory.add_item(args.topic)
+        import re
+        clean_topic = re.sub(r'^\d+_', '', args.topic).replace('_', ' ').strip()
+        item = inventory.add_item(clean_topic)
         item_id = item["id"]
         
         ensure_dir(os.path.join(data_dir, "scripts"))
-        ensure_dir(os.path.join(data_dir, "images", f"{item_id:03d}_{args.topic}"))
+        base_name = f"{item_id:02d}_{clean_topic.replace(' ', '_')}"
+        ensure_dir(os.path.join(data_dir, "images", base_name))
         ensure_dir(os.path.join(data_dir, "audio"))
         ensure_dir(os.path.join(data_dir, "subtitles"))
         ensure_dir(os.path.join(data_dir, "output"))
+        ensure_dir(os.path.join(data_dir, "metadata"))
         
-        base_name = f"{item_id:03d}_{args.topic}"
         inventory.update_paths(item_id,
             script_path=os.path.join(data_dir, "scripts", f"{base_name}.txt"),
             audio_path=os.path.join(data_dir, "audio", f"{base_name}.mp3"),
-            subtitle_path=os.path.join(data_dir, "subtitles", f"{base_name}.srt"),
-            output_path=os.path.join(data_dir, "output", f"{base_name}.mp4")
+            subtitle_path=os.path.join(data_dir, "subtitles", f"{base_name}.ass"),
+            output_path=os.path.join(data_dir, "output", f"{clean_topic.replace(' ', '_')}.mp4"),
+            metadata_path=os.path.join(data_dir, "metadata", f"{base_name}.json") # Keep .json as metadata_path internal key, but save_metadata will handle .txt
         )
         print(f"✅ Buildup Complete for ID {item_id}: {args.topic}")
 
     elif args.command == "render":
         composer = VisualComposer()
+        marketer = MarketingManager()
         
         if args.id is not None:
             # Single Mode
-            render_item(inventory, composer, data_dir, args.id, args.voice)
+            render_item(inventory, composer, marketer, data_dir, args.id, args.voice)
         elif args.start is not None and args.end is not None:
             # Batch Mode
             logger.info(f"🚀 Starting Batch Render: IDs {args.start} to {args.end}")
             success_count = 0
             fail_count = 0
             for i in range(args.start, args.end + 1):
-                if render_item(inventory, composer, data_dir, i, args.voice):
+                if render_item(inventory, composer, marketer, data_dir, i, args.voice):
                     success_count += 1
                 else:
                     fail_count += 1

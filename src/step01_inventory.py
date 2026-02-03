@@ -36,7 +36,8 @@ class InventoryManager:
             "image_paths": [],
             "audio_path": "",
             "subtitle_path": "",
-            "output_path": ""
+            "output_path": "",
+            "metadata_path": ""
         }
         self.inventory.append(item)
         self._save()

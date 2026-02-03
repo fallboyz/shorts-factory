@@ -15,6 +15,8 @@ if __name__ == '__main__':
             run_script('clean_02_scripts.py')
             run_script('clean_03_audio.py')
             run_script('clean_04_images.py')
+            run_script('clean_07_subtitles.py')
+            run_script('clean_08_metadata.py')
             run_script('clean_06_inventory.py')
             print("\nCleanup Complete. (Final MP4s and Fonts are preserved)")
         else:

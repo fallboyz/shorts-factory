@@ -2,12 +2,29 @@
 __pycache__/
 *.py[cod]
 *$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
 .venv/
-env/
 venv/
 ENV/
+env/
 
-# Project Data (Resources)
+# Project Data & Generated Resources
 data/audio/*
 !data/audio/README.md
 data/images/*
@@ -18,14 +35,21 @@ data/scripts/*
 !data/scripts/README.md
 data/subtitles/*
 !data/subtitles/README.md
+data/metadata/*
+!data/metadata/README.md
 
-# Assets
-# assets/fonts/ is now tracked
+# Database & Local State
+data/inventory.json
+inventory_backup.json
+*.log
 
+# Environment & Secret
+.env
+.env.local
 
-# System
+# IDE & System
+.vscode/
+.idea/
 .DS_Store
 Thumbs.db
-.env
-inventory_backup.json
-data/inventory.json
+desktop.ini
